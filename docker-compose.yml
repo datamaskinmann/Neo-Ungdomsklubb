@@ -1,0 +1,33 @@
+version: "3.3"
+services:
+  php:
+    image: php:8.0-apache
+    container_name: neo_php
+    volumes:
+      - ./src/:/var/www/html/
+      - ./etc/apache2/apache2.conf:/etc/apache2/apache2.conf
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/
+    working_dir: /var/www/html/src
+    ports:
+      - 8081:80
+    networks:
+      - neo_network
+    depends_on:
+      - "mariadb"
+    build:
+      context: ./
+      dockerfile: phpDockerfile
+  mariadb:
+    image: mariadb:latest
+    container_name: neo_mariadb
+    networks:
+      - neo_network
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 3308:3306
+
+networks:
+  neo_network:
+    driver: bridge
