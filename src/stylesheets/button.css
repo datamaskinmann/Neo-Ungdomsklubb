@@ -1,0 +1,15 @@
+button {
+    background-color: #f6c453;
+    border:none;
+    padding: 0.75em;
+    transition: opacity, transform 0.25s;
+    opacity: 1;
+    transform: scale(1);
+}
+
+button:hover {
+    cursor: pointer;
+    transition: all 0.25s;
+    transform: scale(1.15);
+    opacity: 0.75;
+}

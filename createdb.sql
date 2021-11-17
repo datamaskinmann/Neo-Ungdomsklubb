@@ -45,7 +45,8 @@ create table if not exists memberInterest(
 create table if not exists activity(
 	id int primary key unique not null auto_increment,
 	tag varchar(16) not null,
-	description varchar(255) not null
+	description varchar(255) not null,
+	date datetime not null,
 );
 
 create table if not exists activityType(
@@ -59,4 +60,9 @@ create table if not exists activityParticipant(
 	foreign key(memberId) references member(id),
 	foreign key(activityId) references activity(id),
     primary key(memberId, activityId)
+);
+
+CREATE table if not exists admin (
+	memberId int not null primary key,
+    foreign key (userId) references member(id)
 );

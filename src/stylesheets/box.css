@@ -4,7 +4,7 @@
 	flex-direction: column;
 }
 
-.box input {
+.box input, .box select {
 	background-color: #e1eedd;
 }
 
@@ -28,8 +28,13 @@
 	transform: scale(1.1);
 }
 
-.box input[type=text], .box input[type=password] {
+.box input[type=text], .box input[type=password], .box input[type=tel], .box input[type=email], .box select,
+.box input[type=number] {
 	width: 100%;
 	margin: 1em auto;
 	padding: 0.5em;
+}
+
+.box select {
+	border: none;
 }

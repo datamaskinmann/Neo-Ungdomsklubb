@@ -1,0 +1,12 @@
+a {
+    transition: opacity 0.25s;
+    color: #183a1d;
+    opacity: 0.75;
+    text-decoration: none;
+}
+
+a:hover {
+    cursor: pointer;
+    transition: opacity 0.25s;
+    opacity: 0.5;
+}
