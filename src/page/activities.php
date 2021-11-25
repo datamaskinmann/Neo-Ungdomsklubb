@@ -20,6 +20,7 @@ if (!doFilter()) {
     <link rel="stylesheet" href="../stylesheets/icons.css"/>
     <link rel="stylesheet" href="../stylesheets/h.css">
     <link rel="stylesheet" href="../stylesheets/a.css">
+    <link rel="stylesheet" href="../stylesheets/overlay.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="../service/html/HTTP.js"></script>
 </head>
@@ -84,10 +85,7 @@ getHeader();
         doPost("../service/activity/deleteActivityService.php", data, null, (e) => {
             console.log(e);
         })
-
-        console.log(data)
     })
-
     $("td input:checked").toArray().forEach(x => {
         console.log(x.parentElement.parentElement.id);
     })

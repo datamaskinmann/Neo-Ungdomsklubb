@@ -16,7 +16,15 @@ function getHeader()
     <div class='box' style='display: flex;'>
         <input style='margin-right: 2em; width: 10em; height: 5em' type='submit' value='Logg ut'/>
     </div>
-</div>";
+</div>
+<div class='overlay'>
+    
+</div>
+<script type='text/javascript'>
+    $('span.menu').on('click', () => {
+        console.log(\"Yo\");
+    })
+</script>";
             break;
     }
 }
