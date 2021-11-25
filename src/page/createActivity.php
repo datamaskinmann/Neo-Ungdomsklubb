@@ -21,11 +21,13 @@ if (!doFilter()) {
     <link rel="stylesheet" href="../stylesheets/activitiesTable.css">
     <link rel="stylesheet" href="../stylesheets/center.css">
     <link rel="stylesheet" href="../stylesheets/h.css">
+    <link rel="stylesheet" href="../stylesheets/a.css">
+    <link rel="stylesheet" href="../stylesheets/icons.css">
     <link rel="stylesheet" href="../stylesheets/button.css">
 </head>
 <body>
 <?php
-    getHeader("../service/user/logoutService.php");
+    getHeader();
 ?>
 <div class="center" style="top: 35%; width: 40%; display: flex; justify-content: center">
     <div class="box">

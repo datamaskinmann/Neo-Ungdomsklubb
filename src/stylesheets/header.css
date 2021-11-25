@@ -1,6 +1,12 @@
 .header {
+    display: flex;
+    flex-direction: row;
     background-color: #e1eedd;
     height: 5%;
     width: 100%;
-    display: table;
+}
+
+.header>* {
+    display: inline-block;
+    width: calc(100%/3);
 }

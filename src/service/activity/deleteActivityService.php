@@ -13,15 +13,15 @@ if (!$_SESSION["isAdmin"]) {
     return;
 }
 
-if (empty($_POST["id"])) {
+if (empty($_POST["idList"])) {
     http_response_code(400);
     return;
 }
 
 include '../database/database.php';
 
-if(!is_array($_POST["id"])) $_POST["id"] = [$_POST["id"]];
+if(!is_array($_POST["idList"])) $_POST["idList"] = [$_POST["idList"]];
 
 delete("activity", "WHERE id in (" . str_repeat("?,",
-        count($_POST["id"]) - 1) . "?)", $_POST["idList"],
-    str_repeat("i", count($_POST["id"])));
+        count($_POST["idList"]) - 1) . "?)", $_POST["idList"],
+    str_repeat("i", count($_POST["idList"])));

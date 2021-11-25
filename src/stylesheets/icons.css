@@ -1,0 +1,23 @@
+.clock {
+    background-image: url("../media/clock.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    display: block;
+}
+
+.menu {
+    transition: opacity 0.25s;
+    opacity: 1;
+    background-image: url("../media/menu.png");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    display: block;
+}
+
+.menu:hover {
+    cursor:pointer;
+    transition: all 0.25s;
+    opacity: 0.75;
+}

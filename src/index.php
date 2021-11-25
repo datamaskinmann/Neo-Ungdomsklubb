@@ -16,7 +16,7 @@
 <body>
 <?php
     include './service/html/htmlService.php';
-    getHeader("./service/user/logoutService.php");
+    getHeader();
 ?>
 <div class="center">
     <h1 style="color: #f6c453">Neo Ungdomsklubb</h1>

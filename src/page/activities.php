@@ -17,7 +17,9 @@ if (!doFilter()) {
     <link rel="stylesheet" href="../stylesheets/activitiesTable.css">
     <link rel="stylesheet" href="../stylesheets/center.css">
     <link rel="stylesheet" href="../stylesheets/button.css">
+    <link rel="stylesheet" href="../stylesheets/icons.css"/>
     <link rel="stylesheet" href="../stylesheets/h.css">
+    <link rel="stylesheet" href="../stylesheets/a.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="../service/html/HTTP.js"></script>
 </head>
@@ -35,7 +37,7 @@ if (!doFilter()) {
 <?php
 include "../service/activity/activityService.php";
 
-getHeader("../service/user/logoutService.php");
+getHeader();
 ?>
 <div class="center" style="width: auto">
     <h1>Aktiviteter</h1>
@@ -47,11 +49,14 @@ getHeader("../service/user/logoutService.php");
         <th>Beskrivelse</th>
         <th>Dato</th>";
     if ($_SESSION["isAdmin"]) echo "<th style='display: flex; justify-content: center'><input type='checkbox' id='selectAll'></th>";
+    include '../service/time/dateFormatter.php';
     echo "</tr>";
     while ($row = mysqli_fetch_array($activities)) {
+        $date = stringToDate($row["date"]);
+
         echo "<tr id='" . $row["id"] . "'>";
         echo "<td>" . $row["tag"] . "</td>";
-        echo "<td>" . $row["date"] . "</td>";
+        echo "<td>" . $date->format("M d - Y H:i") . "</td>";
         if ($_SESSION["isAdmin"]) echo "<td class='inputContainer' style='display: flex; justify-content: center'><input type='checkbox'></td>";
         echo "</tr>";
     }
@@ -74,7 +79,6 @@ getHeader("../service/user/logoutService.php");
         })
     });
     $("#delete").on('click', () => {
-        console.log("yo");
         const data = {"idList":  $("td input:checked").toArray().map(x => x.parentElement.parentElement.id)};
 
         doPost("../service/activity/deleteActivityService.php", data, null, (e) => {
