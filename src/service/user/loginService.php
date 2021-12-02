@@ -16,6 +16,8 @@
 
         if($row > 0) {
             $_SESSION["isAdmin"] = true;
+        } else {
+            $_SESSION["isAdmin"] = false;
         }
 
         header("location: ../../page/activities.php");

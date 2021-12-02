@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="./stylesheets/popin.css"/>
     <link rel="stylesheet" href="./stylesheets/a.css"/>
     <link rel="stylesheet" href="stylesheets/header.css"/>
+    <link rel="stylesheet" href="../stylesheets/overlay.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 </head>
 <body>
 <?php

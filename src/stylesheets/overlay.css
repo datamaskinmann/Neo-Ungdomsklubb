@@ -1,3 +1,45 @@
 .overlay {
+    visibility: hidden;
     position: absolute;
+    height: 100%;
+    width: 10%;
+    background-color: #f0a04b;
+    z-index: 1000;
+}
+
+.overlay a h3 {
+    transition: all 0.25s;
+    opacity: 1;
+}
+
+.overlay h3 {
+    color: white;
+    font-weight: 100;
+    text-align: center;
+}
+
+.overlay a:hover h3 {
+    transition: all 0.25s;
+    opacity: 0.75;
+}
+
+.overlaySlide {
+    animation-name: overlaySlide;
+    animation-duration: 0.25s;
+    animation-direction: normal;
+}
+
+.overlaySlideReverse {
+    animation-name: overlaySlide;
+    animation-duration: 0.25s;
+    animation-direction: reverse;
+}
+
+@keyframes overlaySlide {
+    from {
+        left: -10em;
+    }
+    to {
+        left: 0;
+    }
 }

@@ -8,7 +8,7 @@
                 "postalCode" => $_POST["postalCode"],
                 "city" => $_POST["city"]]);
 
-        if($insert["result"] > 0) {
+        if($insert["insertId"] > 0) {
             $insert = insert("member", "ssssssi",
             ["firstname" => $_POST["firstname"],
                 "lastname" => $_POST["lastname"],

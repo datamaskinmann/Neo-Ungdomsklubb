@@ -78,3 +78,13 @@
 
         return $stmt->get_result();
     }
+
+    function customQuery($query) {
+        global $conn;
+
+        $stmt = $conn->prepare($query);
+
+        $stmt->execute();
+
+        return $stmt->get_result();
+    }

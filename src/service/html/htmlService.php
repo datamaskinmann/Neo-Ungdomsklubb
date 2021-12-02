@@ -14,15 +14,33 @@ function getHeader()
         <h3><a href='/pages/activities.php'>Neo ungdomsklubb</a></h3>
     </div>
     <div class='box' style='display: flex;'>
-        <input style='margin-right: 2em; width: 10em; height: 5em' type='submit' value='Logg ut'/>
+    <form style='margin: 0' action='/service/user/logoutService.php' method='POST'>
+        <input style='margin-right: 2em; width: 10em;' type='submit' value='Logg ut'/>
+    </form>
     </div>
 </div>
 <div class='overlay'>
-    
+    <h3>Meny</h3>
+    <a href='../../page/email.php'><h3>Send epost</h3></a>
 </div>
 <script type='text/javascript'>
     $('span.menu').on('click', () => {
-        console.log(\"Yo\");
+        switch ($('div.overlay').css('visibility')) {
+            case 'visible':
+                $('div.overlay').addClass('overlaySlideReverse');
+                setTimeout(() => {
+                    $('div.overlay').removeClass('overlaySlideReverse');
+                    $('div.overlay').css('visibility', 'hidden');
+                }, 250);
+                break;
+            default:
+                $('div.overlay').css('visibility', 'visible');
+                $('div.overlay').addClass('overlaySlide');
+                setTimeout(() => {
+                    $('div.overlay').removeClass('overlaySlide');
+                }, 250);
+                break
+        }
     })
 </script>";
             break;

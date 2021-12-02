@@ -23,6 +23,14 @@ create table if not exists member (
 	foreign key(adressId) references adress(id)
 );
 
+create table if not exists contingencyStatus (
+	memberId int not null,
+	date date not null,
+	status ENUM('PAID', 'UNPAID') not null,
+	foreign key (memberId) references member(id),
+	primary key (memberId, date, status)
+);
+
 create table if not exists pastMember (
 	memberId int primary key unique not null,
 	foreign key(memberId) references member(id)
