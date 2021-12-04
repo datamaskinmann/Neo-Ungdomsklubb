@@ -11,6 +11,7 @@
 
     if(!is_null($row)) {
         $_SESSION["username"] = $row["email"];
+        $_SESSION["userId"] = $row["id"];
 
         $row = select("COUNT(*)", "admin", "WHERE memberId=?", [$row["id"]], "i")->fetch_row()[0];
 

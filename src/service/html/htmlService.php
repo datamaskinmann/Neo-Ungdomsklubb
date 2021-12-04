@@ -11,7 +11,7 @@ function getHeader()
         <span class='menu' style='height: 4ch; width: 4ch; margin-left: 2em'></span>
     </div>
     <div style='display: flex; justify-content: center; align-items: center'>
-        <h3><a href='/pages/activities.php'>Neo ungdomsklubb</a></h3>
+        <h3><a href='/page/activities.php'>Neo ungdomsklubb</a></h3>
     </div>
     <div class='box' style='display: flex;'>
     <form style='margin: 0' action='/service/user/logoutService.php' method='POST'>
@@ -20,8 +20,12 @@ function getHeader()
     </div>
 </div>
 <div class='overlay'>
-    <h3>Meny</h3>
-    <a href='../../page/email.php'><h3>Send epost</h3></a>
+    <h3>Meny</h3>";
+            if($_SESSION["isAdmin"]) {
+                echo "<a href = '../../page/email.php' ><h3 > Send epost </h3 ></a >";
+                echo "<a href = '../../page/members.php' ><h3 > Medlemsoversikt </h3 ></a >";
+            }
+            echo "
 </div>
 <script type='text/javascript'>
     $('span.menu').on('click', () => {

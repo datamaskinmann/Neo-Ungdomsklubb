@@ -82,9 +82,11 @@ getHeader();
     $("#delete").on('click', () => {
         const data = {"idList":  $("td input:checked").toArray().map(x => x.parentElement.parentElement.id)};
 
-        doPost("../service/activity/deleteActivityService.php", data, null, (e) => {
-            console.log(e);
-        })
+        if(confirm("Er du sikker på at du vil slette aktiviteten(e)?")) {
+            doPost("../service/activity/deleteActivityService.php", data, null, (e) => {
+                window.location.reload();
+            })
+        }
     })
     $("td input:checked").toArray().forEach(x => {
         console.log(x.parentElement.parentElement.id);

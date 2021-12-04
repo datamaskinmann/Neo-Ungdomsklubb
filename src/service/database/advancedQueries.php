@@ -17,11 +17,11 @@ function getAllInterests()
 
 function getAllContingencyState()
 {
-    return customQuery("SELECT x.memberId, x.date, x.status FROM contingencyStatus x
+    return customQuery("SELECT firstname, lastname, email, x.status FROM contingencyStatus x
 	INNER JOIN (
-		select memberId, max(date) AS maxDate, status
+    select memberId, max(date) AS maxDate, status
         from contingencyStatus
         group by memberId
-    ) y on x.memberId=y.memberId AND x.date=maxDate;
-    ");
+    ) y on x.memberId=y.memberId AND x.date=maxDate
+    INNER JOIN member ON x.memberId=member.id;");
 }

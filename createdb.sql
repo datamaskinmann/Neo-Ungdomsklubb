@@ -23,14 +23,6 @@ create table if not exists member (
 	foreign key(adressId) references adress(id)
 );
 
-create table if not exists contingencyStatus (
-	memberId int not null,
-	date date not null,
-	status ENUM('PAID', 'UNPAID') not null,
-	foreign key (memberId) references member(id),
-	primary key (memberId, date, status)
-);
-
 create table if not exists pastMember (
 	memberId int primary key unique not null,
 	foreign key(memberId) references member(id)
@@ -45,8 +37,8 @@ create table if not exists interest(
 create table if not exists memberInterest(
 	memberId int unique not null,
 	interestId int unique not null,
-	foreign key(memberId) references member(id),
-	foreign key(interestId) references interest(id),
+	foreign key(memberId) references member(id) ON DELETE CASCADE,
+	foreign key(interestId) references interest(id) ON DELETE CASCADE,
     primary key(memberId, interestId)
 );
 
@@ -65,12 +57,12 @@ create table if not exists activityType(
 create table if not exists activityParticipant(
 	memberId int not null unique,
 	activityId int not null unique,
-	foreign key(memberId) references member(id),
-	foreign key(activityId) references activity(id),
+	foreign key(memberId) references member(id) ON DELETE CASCADE,
+	foreign key(activityId) references activity(id) ON DELETE CASCADE,
     primary key(memberId, activityId)
 );
 
-CREATE table if not exists admin (
 	memberId int not null primary key,
-    foreign key (userId) references member(id)
+CREATE table if not exists admin (
+    foreign key (userId) references member(id) ON DELETE CASCADE
 );

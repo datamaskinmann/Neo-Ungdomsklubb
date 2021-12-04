@@ -11,6 +11,21 @@
         http_response_code(400);
         return;
     }
+
+    if($_SERVER["REQUEST_METHOD"] == "POST") {
+        include '../service/database/database.php';
+        switch ($_POST["mode"]) {
+            case "join":
+                insert("activityParticipant", "ii", ["memberId" => $_SESSION["userId"],
+                    "activityId" => $_POST["activityId"]]);
+                break;
+            case "leave":
+                delete("activityParticipant", "WHERE memberId=? AND activityId=?",
+                ["memberId" => $_SESSION["userId"], "activityId" => $_POST["activityId"]], "ii");
+                break;
+        }
+        return;
+    }
     ?>
 <html>
     <head>
@@ -26,6 +41,25 @@
         <link rel="stylesheet" href="../stylesheets/icons.css">
         <link rel="stylesheet" href="../stylesheets/overlay.css">
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <script src="/service/html/HTTP.js"></script>
+        <script type="text/javascript">
+            $(() => {
+                $("#control").on('click', () => {
+                    const params = new URLSearchParams(window.location.search);
+                    doPost("", {activityId: params.get("id"), mode: $("#control").attr("mode")}, null, () => {
+                        switch ($("#control").attr("mode")) {
+                            case "leave":
+                                alert("Du er nå meldt av!");
+                                break;
+                                case "join":
+                                    alert("Du er nå meldt på!");
+                                    break;
+                        }
+                        window.location.reload();
+                    })
+                })
+            })
+        </script>
     </head>
     <body>
     <?php
@@ -50,7 +84,13 @@
         <p>
             <?php global $res; echo $res["description"] ?>
         </p>
-        <button style="float: right; margin-top: 5%">Meld på</button>
+        <?php
+        if(select("COUNT(*)", "activityParticipant", "WHERE memberId=? AND activityId=?", ["memberId" => $_SESSION["userId"], "activityId" => $_GET["id"]], "ii")->fetch_row()[0] != 0) {
+            echo "<button mode='leave' id='control' style='float: right; margin-top: 5%'>Meld av</button>";
+            return;
+        }
+        echo "<button id='control' mode='join' style='float: right; margin-top: 5%'>Meld på</button>";
+        ?>
     </div>
     </body>
 </html>

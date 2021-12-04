@@ -29,11 +29,54 @@ if (!$_SESSION["isAdmin"]) {
         opacity: 0.75;
     }
 
+    input:hover {
+        cursor: pointer;
+    }
+
+    textarea {
+        width: 100%;
+        height: 10em;
+        background-color: #e1eedd;
+        border: none;
+    }
+
+    hr {
+        background-color: #e1eedd;
+        height: 2px;
+        border-width: 0;
+        color: #e1eedd;
+        border-color: #e1eedd;
+    }
+
     ul {
         width: 100%;
         list-style: none;
         padding: 0;
         margin-right: 1em;
+    }
+
+    input[type=submit] {
+        background-color: #183a1d;
+        color: white;
+        width: 40%;
+        float: right;
+        margin: 1em auto;
+        padding: 0.5em;
+        transition: opacity 0.25s;
+        opacity: 1;
+        border-radius: 1em;
+    }
+
+    input[type=submit]:hover {
+        transition: 0.25s;
+        opacity: 0.75;
+        cursor: pointer;
+    }
+
+    input[type=text] {
+        background-color: #e1eedd;
+        margin-bottom: 0.5em;
+        width: 100%;
     }
 </style>
 <head>
@@ -60,7 +103,7 @@ getHeader();
 <div style="width: 100%; display: flex; justify-content: center">
     <h2>Send en epost</h2>
 </div>
-<div style="width: auto; max-height: 80%; position: absolute; left: 50%; transform: translateX(-50%); overflow-y: auto">
+<div style="width: auto; max-height: 85%; position: absolute; left: 50%; transform: translateX(-50%); overflow-y: auto">
     <?php
     include '../service/database/advancedQueries.php';
 
@@ -68,9 +111,8 @@ getHeader();
     $interests = getAllInterests()->fetch_all(MYSQLI_ASSOC);
     $contingencyState = getAllContingencyState()->fetch_all(MYSQLI_ASSOC);
 
-
-
     echo "<div id='emailListContainer'>";
+    echo "<h2>Aktiviteter</h2>";
     foreach(filterResultByAttributeUnique($activityParticipants, "tag") as $tag) {
         echo "<h3>" . $tag . "</h3>";
         echo "<ul>";
@@ -84,7 +126,23 @@ getHeader();
         }
         echo "</ul>";
     }
+    echo "<h2>Kontingentstatus</h2>";
+    foreach(filterResultByAttributeUnique($contingencyState, "status") as $status) {
+        echo "<h3>" . $status . "</h3>";
+        echo "<ul>";
+        foreach(filterResultByAttributeValue($contingencyState, "status", $status) as $member) {
+            echo "<li>";
+            echo "<div>";
+            echo $member["firstname"] . " " . $member["lastname"] . " (" . $member["email"] . ")";
+            echo "<input email='" . $member["email"] . "' type='checkbox' style='float: right;'/>";
+            echo "</div>";
+            echo "</li>";
+        }
+        echo "</ul>";
+    }
     echo "</div>";
+
+    /* Interesser */
 
     function filterResultByAttributeValue($result, $attribute, $value) {
         $ret = [];
@@ -108,9 +166,31 @@ getHeader();
         return $ret;
     }
     ?>
-</div>
-<script type="text/javascript">
+    <hr/>
+    <h3>Skriv din epost</h3>
+    <input id="subject" type="text" placeholder="Overskrift...">
+    <textarea id="emailContent">
 
-</script>
+    </textarea>
+    <input type="Submit" value="Send">
+</div>
 </body>
+<script type="text/javascript">
+    $("input[type='checkbox']").on('change', (e) => {
+        let email = e.target.attributes["email"].value;
+        $("input[email='" + email + "']").prop("checked", e.target.checked);
+    });
+    $("input[type='Submit']").on('click', () => {
+        let emailList = [];
+        $("input:checked").toArray().forEach((x) => {
+            if(!emailList.includes(x.attributes["email"].value)) emailList.push(x.attributes["email"].value);
+        })
+        doPost("/service/email/emailService.php",
+            {content: $("#emailContent").val(),
+            subject: $("#subject").val(),
+            emailList: emailList}, null, (e) => {
+                console.log(e);
+            })
+    })
+</script>
 </html>
