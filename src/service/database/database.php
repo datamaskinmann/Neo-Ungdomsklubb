@@ -66,6 +66,27 @@
         return $stmt->get_result();
     }
 
+    function update($table, $condition, $data, $types) {
+        global $conn;
+
+        $buffer = "UPDATE " . $table . " SET ";
+
+        $i = 0;
+        foreach(array_keys($data) as $key) {
+            $buffer .= $i != count($data) -1 ? ($key . "=?,") : ($key . "=?");
+            $i++;
+        }
+
+        $buffer .= " " . $condition;
+
+        $stmt = $conn->prepare($buffer);
+
+        $stmt->bind_param($types, ...array_values($data));
+        $stmt->execute();
+
+        return $stmt->get_result();
+    }
+
     function delete($table, $condition, $data, $types) {
         global $conn;
 

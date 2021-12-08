@@ -22,8 +22,10 @@ function getHeader()
 <div class='overlay'>
     <h3>Meny</h3>";
             if($_SESSION["isAdmin"]) {
-                echo "<a href = '../../page/email.php' ><h3 > Send epost </h3 ></a >";
+                echo "<a href = '../../page/email.php'><h3> Send epost </h3></a >";
                 echo "<a href = '../../page/members.php' ><h3 > Medlemsoversikt </h3 ></a >";
+                echo "<a href = '../../page/editUser.php' ><h3> Rediger brukere </h3 ></a >";
+
             }
             echo "
 </div>
