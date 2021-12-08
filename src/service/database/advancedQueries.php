@@ -25,3 +25,8 @@ function getAllContingencyState()
     ) y on x.memberId=y.memberId AND x.date=maxDate
     INNER JOIN member ON x.memberId=member.id;");
 }
+
+function getAllPastMembers() {
+    return customQuery("SELECT firstname, lastname, email FROM pastMember 
+    INNER JOIN member on pastMember.memberId=member.id;");
+}

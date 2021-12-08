@@ -106,6 +106,7 @@ getHeader();
 <div style="width: auto; max-height: 85%; position: absolute; left: 50%; transform: translateX(-50%); overflow-y: auto">
     <?php
     include '../service/database/advancedQueries.php';
+    include '../service/database/filtering.php';
 
     $activityParticipants = getAllActivityParticipants()->fetch_all(MYSQLI_ASSOC);
     $interests = getAllInterests()->fetch_all(MYSQLI_ASSOC);
@@ -117,6 +118,20 @@ getHeader();
         echo "<h3>" . $tag . "</h3>";
         echo "<ul>";
         foreach(filterResultByAttributeValue($activityParticipants, "tag", $tag) as $member) {
+            echo "<li>";
+            echo "<div>";
+            echo $member["firstname"] . " " . $member["lastname"] . " (" . $member["email"] . ")";
+            echo "<input email='" . $member["email"] . "' type='checkbox' style='float: right;'/>";
+            echo "</div>";
+            echo "</li>";
+        }
+        echo "</ul>";
+    }
+    echo "<h2>Interesser</h2>";
+    foreach (filterResultByAttributeUnique($interests, "tag") as $interest) {
+        echo "<h3>" . mb_strtoupper($interest[0]) . substr($interest, 1) . "</h3>";
+        echo "<ul>";
+        foreach(filterResultByAttributeValue($interests, "tag", $interest) as $member) {
             echo "<li>";
             echo "<div>";
             echo $member["firstname"] . " " . $member["lastname"] . " (" . $member["email"] . ")";
@@ -142,29 +157,6 @@ getHeader();
     }
     echo "</div>";
 
-    /* Interesser */
-
-    function filterResultByAttributeValue($result, $attribute, $value) {
-        $ret = [];
-
-        $index = 0;
-        for($i = 0; $i < count($result); $i++) {
-            if($result[$i][$attribute] != $value) continue;
-            $ret[$index] = $result[$i];
-            $index++;
-        }
-        return $ret;
-    }
-
-    function filterResultByAttributeUnique($result, $attribute) {
-        $ret = [];
-
-        for($i = 0; $i < count($result); $i++) {
-            if(!in_array($result[$i][$attribute], $ret)) array_push($ret, $result[$i][$attribute]);
-        }
-
-        return $ret;
-    }
     ?>
     <hr/>
     <h3>Skriv din epost</h3>

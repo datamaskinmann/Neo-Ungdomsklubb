@@ -17,19 +17,20 @@
     <h1 style="color: #f6c453">Registrer deg</h1>
     <div class="box popIn">
         <form style="display: block" action="../service/user/registrationService.php" method="post">
-            <input type="text" name="firstname" placeholder="Fornavn..."/>
-            <input type="text" name="lastname" placeholder="Etternavn..."/>
-            <input type="tel" name="phonenumber" placeholder="Telefonnummer..."/>
-            <input type="email" name="email" placeholder="Epost-addresse..."/>
-            <input type="password" name="password" placeholder="Passord..."/>
-            <select name="gender">
+            <input type="text" name="firstname" placeholder="Fornavn..." required/>
+            <input type="text" name="lastname" placeholder="Etternavn..." required/>
+            <input type="tel" name="phonenumber" placeholder="Telefonnummer..." required/>
+            <input type="email" name="email" placeholder="Epost-addresse..." required/>
+            <input type="password" name="password" placeholder="Passord..." required/>
+            <select name="gender" required>
                 <option disabled selected>Kjønn...</option>
                 <option value="male">Mann</option>
                 <option value="female">Kvinne</option>
             </select>
-            <input type="text" name="street" placeholder="Adresse..."/>
-            <input type="number" min="0" max="9999" name="postalCode" placeholder="Postkode..."/>
-            <input type="text" name="city" placeholder="Poststed..."/>
+            <input type="text" name="street" placeholder="Adresse..." required/>
+            <input type="number" min="0" max="9999" name="postalCode" placeholder="Postkode..." required/>
+            <input type="text" name="city" placeholder="Poststed..." required/>
+            <input type="text" name="interests" placeholder="Interesser... (Separer med komma)" required/>
             <input type="submit" name="submit" value="Send inn"/>
         </form>
     </div>
