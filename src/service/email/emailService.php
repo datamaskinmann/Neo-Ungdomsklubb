@@ -4,12 +4,7 @@
 
     session_start();
 
-    if(!doFilter()) {
-        http_response_code(403);
-        return;
-    }
-
-    if(!$_SESSION["isAdmin"]) {
+    if(!doFilter() || !$_SESSION["isAdmin"]) {
         http_response_code(403);
         return;
     }

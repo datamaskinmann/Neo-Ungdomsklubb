@@ -13,6 +13,7 @@
     function insert($table, $types, $data) {
         global $conn;
 
+        // Start generating the string
         $buffer = "INSERT INTO " . $table . " (";
 
         $i = 0;
