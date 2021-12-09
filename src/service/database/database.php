@@ -1,5 +1,6 @@
 <?php
-    $host = "172.20.0.2";
+// Database service
+    $host = "172.20.0.3";
     $username = "root";
     $password = "root";
     $db = "neo";
@@ -8,6 +9,7 @@
 
     if($conn->connect_error) die("An error occurred while connecting to the database");
 
+    // inserts into a table
     function insert($table, $types, $data) {
         global $conn;
 
@@ -37,7 +39,7 @@
         }
 
         try {
-            $res = $stmt->execute();
+            $stmt->execute();
         } catch (Exception $e) {
             echo $e->getMessage();
             return null;

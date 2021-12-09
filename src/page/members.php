@@ -1,12 +1,10 @@
 <?php
+
+// Page for viewing members
+
 include "../service/html/htmlService.php";
 session_start();
-if (!doFilter()) {
-    http_response_code(403);
-    return;
-}
-
-if (!$_SESSION["isAdmin"]) {
+if (!doFilter() || !$_SESSION["isAdmin"]) {
     http_response_code(403);
     return;
 }
@@ -110,16 +108,22 @@ getHeader();
         include '../service/database/advancedQueries.php';
         include '../service/database/filtering.php';
 
+        // Query that gets all activities that have participants
         $activityParticipants = getAllActivityParticipants()->fetch_all(MYSQLI_ASSOC);
+        // Query that gets all interests with at least one associated user
         $interests = getAllInterests()->fetch_all(MYSQLI_ASSOC);
+        // Query that gets the newest contingency state for each user
         $contingencyState = getAllContingencyState()->fetch_all(MYSQLI_ASSOC);
+        // Query that gets all past members
         $pastMembers = getAllPastMembers()->fetch_all(MYSQLI_ASSOC);
 
         echo "<div id='emailListContainer'>";
         echo "<h2>Aktiviteter</h2>";
+        // Iterate through every activity (tag)
         foreach (filterResultByAttributeUnique($activityParticipants, "tag") as $tag) {
             echo "<h3>" . $tag . "</h3>";
             echo "<ul>";
+            // Iterate through each member of that activity
             foreach (filterResultByAttributeValue($activityParticipants, "tag", $tag) as $member) {
                 echo "<li>";
                 echo "<div>";
@@ -131,9 +135,11 @@ getHeader();
             echo "</ul>";
         }
         echo "<h2>Interesser</h2>";
+        // Iterate through each interest
         foreach (filterResultByAttributeUnique($interests, "tag") as $interest) {
             echo "<h3>" . mb_strtoupper($interest[0]) . substr($interest, 1) . "</h3>";
             echo "<ul>";
+            // Iterate through every member associated with that interest
             foreach (filterResultByAttributeValue($interests, "tag", $interest) as $member) {
                 echo "<li>";
                 echo "<div>";
@@ -145,9 +151,11 @@ getHeader();
             echo "</ul>";
         }
         echo "<h2>Kontingentstatus</h2>";
+        // Iterate through every contingency status
         foreach (filterResultByAttributeUnique($contingencyState, "status") as $status) {
             echo "<h3>" . $status . "</h3>";
             echo "<ul>";
+            // Iterate through members with that contingency status
             foreach (filterResultByAttributeValue($contingencyState, "status", $status) as $member) {
                 echo "<li>";
                 echo "<div>";
@@ -159,14 +167,17 @@ getHeader();
             echo "</ul>";
         }
         echo "<h2>Tidligere medlemmer</h2>";
+        echo "<ul>";
+        // Iterate through every past member
         foreach($pastMembers as $member) {
             echo "<li>";
             echo "<div>";
             echo $member["firstname"] . " " . $member["lastname"] . " (" . $member["email"] . ")";
-            echo "<input email='" . $member["email"] . "' type='checkbox' style='float: right;/>";
+            echo "<input email='" . $member["email"] . "' type='checkbox' style='float: right;'/>";
             echo "</div>";
             echo "</li>";
         }
+        echo "</ul>";
         echo "</div>";
         ?>
     </div>
@@ -178,15 +189,17 @@ getHeader();
 </div>
 </body>
 <script type="text/javascript">
+    // Make sure that all checkboxes are checked if a user is in multiple categories
     $("input[type='checkbox']").on('change', (e) => {
         let email = e.target.attributes["email"].value;
         $("input[email='" + email + "']").prop("checked", e.target.checked);
 
         let emailList = [];
+        // Get every unique email
         $("input:checked").toArray().forEach((x) => {
             if(!emailList.includes(x.attributes["email"].value)) emailList.push(x.attributes["email"].value);
         })
-
+        // Push the email list to the textarea
         $("#selected").val(emailList.join(',\n'));
     });
 </script>

@@ -7,6 +7,7 @@
 
     include  $_SERVER["DOCUMENT_ROOT"] . '/service/database/database.php';
 
+    // Gets all activities ordered by ascending date
     function getAllActivities() {
         return select("id, tag, date", "activity", "ORDER BY date ASC", null, null);
     }

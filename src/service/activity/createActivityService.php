@@ -1,5 +1,7 @@
 <?php
 
+    // Service for creating an activity
+
     session_start();
 
     include '../../service/html/htmlService.php';

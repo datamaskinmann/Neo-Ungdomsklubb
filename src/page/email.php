@@ -1,12 +1,8 @@
 <?php
+// Page for sending emails
 include "../service/html/htmlService.php";
 session_start();
-if (!doFilter()) {
-    http_response_code(403);
-    return;
-}
-
-if (!$_SESSION["isAdmin"]) {
+if (!doFilter() || !$_SESSION["isAdmin"]) {
     http_response_code(403);
     return;
 }
@@ -108,15 +104,20 @@ getHeader();
     include '../service/database/advancedQueries.php';
     include '../service/database/filtering.php';
 
+    // Query that gets all activities which have at least one contributor
     $activityParticipants = getAllActivityParticipants()->fetch_all(MYSQLI_ASSOC);
+    // Query that gets all interests that have at least one member associated
     $interests = getAllInterests()->fetch_all(MYSQLI_ASSOC);
+    // Query that gets the newest contingency state for each user
     $contingencyState = getAllContingencyState()->fetch_all(MYSQLI_ASSOC);
 
     echo "<div id='emailListContainer'>";
     echo "<h2>Aktiviteter</h2>";
+    // Iterates through each unique tag
     foreach(filterResultByAttributeUnique($activityParticipants, "tag") as $tag) {
         echo "<h3>" . $tag . "</h3>";
         echo "<ul>";
+        // Gets all members associated with a tag
         foreach(filterResultByAttributeValue($activityParticipants, "tag", $tag) as $member) {
             echo "<li>";
             echo "<div>";
@@ -128,9 +129,11 @@ getHeader();
         echo "</ul>";
     }
     echo "<h2>Interesser</h2>";
+    // Iterates through each interest
     foreach (filterResultByAttributeUnique($interests, "tag") as $interest) {
         echo "<h3>" . mb_strtoupper($interest[0]) . substr($interest, 1) . "</h3>";
         echo "<ul>";
+        // Iterates all members associated with an interest
         foreach(filterResultByAttributeValue($interests, "tag", $interest) as $member) {
             echo "<li>";
             echo "<div>";
@@ -142,9 +145,11 @@ getHeader();
         echo "</ul>";
     }
     echo "<h2>Kontingentstatus</h2>";
+    // Iterates through each contingency state
     foreach(filterResultByAttributeUnique($contingencyState, "status") as $status) {
         echo "<h3>" . $status . "</h3>";
         echo "<ul>";
+        // Iterates through each member associated with a contingency state
         foreach(filterResultByAttributeValue($contingencyState, "status", $status) as $member) {
             echo "<li>";
             echo "<div>";
@@ -168,12 +173,14 @@ getHeader();
 </div>
 </body>
 <script type="text/javascript">
+    // Snippet for checking users that are mentioned in multiple categories
     $("input[type='checkbox']").on('change', (e) => {
         let email = e.target.attributes["email"].value;
         $("input[email='" + email + "']").prop("checked", e.target.checked);
     });
     $("input[type='Submit']").on('click', () => {
         let emailList = [];
+        // Make an array of all unique emails
         $("input:checked").toArray().forEach((x) => {
             if(!emailList.includes(x.attributes["email"].value)) emailList.push(x.attributes["email"].value);
         })

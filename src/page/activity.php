@@ -1,17 +1,19 @@
 <?php
-
+    // Page for displaying more details about a specific event
     include '../service/html/htmlService.php';
     session_start();
-    if (!doFilter()) {
+    if (!doFilter()) { // if the user is not logged in
         http_response_code(403);
         return;
     }
 
-    if(empty($_GET["id"])) {
+    if(empty($_GET["id"])) { // if the user did not specify an id in the request parameter
         http_response_code(400);
         return;
     }
 
+    // When joining an event, the data is posted to the same URL
+    // This if statement handles this behaviour
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         include '../service/database/database.php';
         switch ($_POST["mode"]) {
@@ -43,9 +45,12 @@
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
         <script src="/service/html/HTTP.js"></script>
         <script type="text/javascript">
+            // On load
             $(() => {
+                // When clicking the join/leave button
                 $("#control").on('click', () => {
                     const params = new URLSearchParams(window.location.search);
+                    // Make POST request to this url with either mode join or leave
                     doPost("", {activityId: params.get("id"), mode: $("#control").attr("mode")}, null, () => {
                         switch ($("#control").attr("mode")) {
                             case "leave":
@@ -63,10 +68,11 @@
     </head>
     <body>
     <?php
-        getHeader();
+        getHeader(); // Display the header/navbar
 
         include '../service/database/database.php';
 
+        // Find data about the activity selected
         $res = select("tag, description, date", "activity", "WHERE id=?", [$_GET["id"]], "i")->fetch_assoc();
     ?>
     <div class="center">

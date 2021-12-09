@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `neo`.`activity` (
   `date` DATETIME NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 21
+AUTO_INCREMENT = 23
 DEFAULT CHARACTER SET = utf8mb4;
 
 
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `neo`.`adress` (
   `city` VARCHAR(255) NOT NULL,
   UNIQUE INDEX `id` (`id` ASC))
 ENGINE = InnoDB
-AUTO_INCREMENT = 44
+AUTO_INCREMENT = 58
 DEFAULT CHARACTER SET = utf8mb4;
 
 
@@ -87,12 +87,13 @@ CREATE TABLE IF NOT EXISTS `neo`.`member` (
   `adressId` INT(11) NOT NULL,
   `dateCreated` DATETIME NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id`),
-  INDEX `adressId` (`adressId` ASC) VISIBLE,
+  INDEX `member_ibfk_1` (`adressId` ASC) VISIBLE,
   CONSTRAINT `member_ibfk_1`
     FOREIGN KEY (`adressId`)
-    REFERENCES `neo`.`adress` (`id`))
+    REFERENCES `neo`.`adress` (`id`)
+    ON DELETE NO ACTION)
 ENGINE = InnoDB
-AUTO_INCREMENT = 10
+AUTO_INCREMENT = 24
 DEFAULT CHARACTER SET = utf8mb4;
 
 
@@ -115,7 +116,7 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `neo`.`contingencyStatus` (
   `memberId` INT(11) NOT NULL,
-  `date` DATE NOT NULL,
+  `date` DATE NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   `status` ENUM('PAID', 'UNPAID') NOT NULL,
   PRIMARY KEY (`memberId`, `date`, `status`),
   CONSTRAINT `contingencyStatus_ibfk_1`
@@ -134,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `neo`.`interest` (
   `tag` VARCHAR(16) NOT NULL,
   PRIMARY KEY (`id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 4
+AUTO_INCREMENT = 18
 DEFAULT CHARACTER SET = utf8mb4;
 
 
@@ -145,8 +146,7 @@ CREATE TABLE IF NOT EXISTS `neo`.`memberInterest` (
   `memberId` INT(11) NOT NULL,
   `interestId` INT(11) NOT NULL,
   PRIMARY KEY (`memberId`, `interestId`),
-  UNIQUE INDEX `memberId` (`memberId` ASC) VISIBLE,
-  UNIQUE INDEX `interestId` (`interestId` ASC) VISIBLE,
+  INDEX `memberInterest_ibfk_2` (`interestId` ASC) VISIBLE,
   CONSTRAINT `memberInterest_ibfk_1`
     FOREIGN KEY (`memberId`)
     REFERENCES `neo`.`member` (`id`)

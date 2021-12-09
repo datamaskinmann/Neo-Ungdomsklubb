@@ -1,4 +1,7 @@
 <?php
+
+// Page for creating an activity
+
 include '../service/html/htmlService.php';
 session_start();
 if (!doFilter()) {

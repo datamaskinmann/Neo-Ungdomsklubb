@@ -3,7 +3,7 @@ function getHeader()
 {
     switch (empty($_SESSION["username"])) {
         case true:
-            echo "Hello, not logged in";
+            echo "<div class='header'></div>";
             break;
         default:
             echo "<div class='header'>

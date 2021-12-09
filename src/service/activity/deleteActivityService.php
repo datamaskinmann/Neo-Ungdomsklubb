@@ -1,4 +1,7 @@
 <?php
+
+// Service for deleting an activity
+
 session_start();
 
 include '../../service/html/htmlService.php';
@@ -23,5 +26,5 @@ include '../database/database.php';
 if(!is_array($_POST["idList"])) $_POST["idList"] = [$_POST["idList"]];
 
 delete("activity", "WHERE id in (" . str_repeat("?,",
-        count($_POST["idList"]) - 1) . "?)", $_POST["idList"],
+        count($_POST["idList"]) - 1) . "?)", $_POST["idList"], // Dynamically generate a prepared statement
     str_repeat("i", count($_POST["idList"])));

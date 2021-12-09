@@ -1,12 +1,8 @@
 <?php
+// Page for editing a user
 include "../service/html/htmlService.php";
 session_start();
-if (!doFilter()) {
-    http_response_code(403);
-    return;
-}
-
-if (!$_SESSION["isAdmin"]) {
+if (!doFilter() || !$_SESSION["isAdmin"]) { // If the user is not logged in or is not an admin
     http_response_code(403);
     return;
 }
@@ -127,16 +123,22 @@ getHeader();
         include '../service/database/advancedQueries.php';
         include '../service/database/filtering.php';
 
+        // Query that gets all activities with participants
         $activityParticipants = getAllActivityParticipants()->fetch_all(MYSQLI_ASSOC);
+        // Query that gets all interests with members associated
         $interests = getAllInterests()->fetch_all(MYSQLI_ASSOC);
+        // Query that gets all the newest contingency states for all users
         $contingencyState = getAllContingencyState()->fetch_all(MYSQLI_ASSOC);
+        // Query that gets all past members
         $pastMembers = getAllPastMembers()->fetch_all(MYSQLI_ASSOC);
 
         echo "<div id='emailListContainer'>";
         echo "<h2>Aktiviteter</h2>";
+        // Finds all unique tags and iterates over them
         foreach (filterResultByAttributeUnique($activityParticipants, "tag") as $tag) {
             echo "<h3>" . $tag . "</h3>";
             echo "<ul>";
+            // Finds all users who participate in an activity with a specific tag ($tag)
             foreach (filterResultByAttributeValue($activityParticipants, "tag", $tag) as $member) {
                 echo "<li>";
                 echo "<div>";
@@ -148,9 +150,11 @@ getHeader();
             echo "</ul>";
         }
         echo "<h2>Interesser</h2>";
+        // Finds all unique interests and iterates over them
         foreach (filterResultByAttributeUnique($interests, "tag") as $interest) {
             echo "<h3>" . mb_strtoupper($interest[0]) . substr($interest, 1) . "</h3>";
             echo "<ul>";
+            // Finds all users with a specific interest ($interest)
             foreach (filterResultByAttributeValue($interests, "tag", $interest) as $member) {
                 echo "<li>";
                 echo "<div>";
@@ -162,9 +166,11 @@ getHeader();
             echo "</ul>";
         }
         echo "<h2>Kontingentstatus</h2>";
+        // Gets all unique contingency statuses (paid&unpaid)
         foreach (filterResultByAttributeUnique($contingencyState, "status") as $status) {
             echo "<h3>" . $status . "</h3>";
             echo "<ul>";
+            // Iterates members who have status paid/unpaid
             foreach (filterResultByAttributeValue($contingencyState, "status", $status) as $member) {
                 echo "<li>";
                 echo "<div>";
@@ -176,6 +182,7 @@ getHeader();
             echo "</ul>";
         }
         echo "<h2>Tidligere medlemmer</h2>";
+        // Iterates past members
         foreach ($pastMembers as $member) {
             echo "<li>";
             echo "<div>";
@@ -210,32 +217,42 @@ getHeader();
 </div>
 </body>
 <script type="text/javascript">
+    // When clicking on a checkbox
     $("input[type='checkbox']").on('change', (e) => {
         let email = e.target.attributes["email"].value;
+        // Make all checkboxes with the same email checked (in case the member is in multiple categories)
         $("input[email='" + email + "']").prop("checked", e.target.checked);
+        // Make all checkboxes which do not have that email disabled
         $("input[type='checkbox'][email!='" + email + "']").prop("disabled", e.target.checked);
         let user;
         let editedFields = [];
+        // Gets the user's data in JSON format
         getUserData(email, (e) => {
             user = JSON.parse(e);
             editedFields = [];
             $("#username").html(user.email);
-            for(var key in user) {
+            // Iterate over field names in user object which are the same as our input names
+            for(const key in user) {
+                // Special case for gender
                 if(key === "gender") {
                     $("#gender option[value='" + user[key] + "']").attr("selected", "selected");
                     continue;
                 }
+                // Set the respective input's value
                 $("input[name='" + key + "']").val(user[key]);
             }
         });
+        // Display the edit area if a member is selected
         $("#editContainer").css("visibility", e.target.checked ? "visible" : "hidden");
         $(".userEditor").on('change', (e) => {
+            // Keep track of changed fields + track the edits in the user object
             user[e.target.name] = e.target.value;
             editedFields.push(e.target.name);
         });
         $("input[type='submit']").on('click', () => {
             editUserData(user, editedFields, (e) => {
-                console.log(e);
+                alert("Brukeren ble oppdatert");
+                window.location.reload();
             });
         });
     });
